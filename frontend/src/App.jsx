@@ -12,10 +12,11 @@ function App() {
    const [isUserLogged, setIsUserLogged] = useState(false)
    const [userCoins, setUserCoins] = useState(null)
    const [user, setUser] = useState({})
+   const [userImages, setUserImages] = useState([])
 
   return (
     <>
-    <userContext.Provider value={{isLogin, setIsLogin, userCoins, setUserCoins, user, setUser, isUserLogged, setIsUserLogged}}>
+    <userContext.Provider value={{isLogin, setIsLogin, userCoins, setUserCoins, user, setUser, isUserLogged, setIsUserLogged, userImages, setUserImages}}>
       <Header />
       <div>
         <Routes>

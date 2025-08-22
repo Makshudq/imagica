@@ -15,7 +15,7 @@ const userModel = mongoose.model('userData', userSchema)
 
 const imageSchema = new mongoose.Schema(
     {
-        userId: { type: mongoose.Schema.Types.ObjectId, ref: "userData", require: true },
+        userId: { type: mongoose.Schema.Types.ObjectId, ref: "userData", require: true, unique: false },
         prompt: { type: String, require: true },
         image: { type: String, require: true }
     },

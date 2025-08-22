@@ -3,10 +3,8 @@ import { imageModel, userModel } from "../mongodb/model.js"
 import FormData from "form-data"
 
 const generateImage = async (req, res) => {
-
   try {
     const { userId, body: { prompt } } = req
-    console.log(req, 'userId.........')
     const userDate = await userModel.findById(userId)
     if (!userDate) {
       return res.status(400).json({ success: false, message: "User not found." })
@@ -45,26 +43,43 @@ const generateImage = async (req, res) => {
       resultImage
     })
   } catch (error) {
-
     res.status(400).json({ success: false, message: `ImageController: ${error.message}` })
   }
 }
 
-
 const uploadImage = async (req, res) => {
   try {
     const { userId, body: { image, prompt } } = req
-    if (!image || !prompt) res.status(400).json({ success: false, message: "uploadImage: image/prompt not provided" })
+    if (!image) res.status(400).json({ success: false, message: "uploadImage: image not provided" })
+    if (!prompt) res.status(400).json({ success: false, message: "uploadImage: prompt not provided" })
 
-    await imageModel.create({
-      userId, image, prompt
-    })
+    await imageModel.create({ userId, image, prompt })
+
     res.status(200).json({ success: true, message: 'image uploaded successfully !!!', })
 
   } catch (error) {
-
     res.status(400).json({ success: false, message: `uploadImage: ${error.message}` })
   }
 }
 
-export { generateImage, uploadImage }
+const getAllImages = async (req, res) => {
+
+  try {
+    const { userId } = req
+
+  if (!userId) res.status(400).json({ success: false, message: `getAllImages: userId not found !!!` })
+
+  const allUserImages = await imageModel.find({userId:userId})
+
+  res.status(200).json({ success: true,allUserImages,  message: 'image uploaded successfully !!!', })
+
+  console.log(allUserImages,'allUserImages')
+
+  } catch (error) {
+    res.status(400).json({ success: false, message: `getAllImages: ${error.message}` })
+    
+  }
+
+}
+
+export { generateImage, uploadImage, getAllImages }
