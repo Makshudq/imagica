@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt"
-import userModel from "../mongodb/model.js"
+import {userModel} from "../mongodb/model.js"
 import jwt from 'jsonwebtoken'
 import { connectDB } from "../mongodb/mongoConnection.js"
 connectDB()
@@ -8,7 +8,6 @@ connectDB()
 const getUserCoins = async (req, res) => {
 
     try {
-        console.log(req.body,'body')
         const { userId } = req
         const userData = await userModel.findById(userId)
         if (userData) {
@@ -61,7 +60,6 @@ const loginUser = async (req, res) => {
             return res.status(400).json({ success: false, message: "User doesn not exist, please make new account" })
         }
         const isPasswordMatched = await bcrypt.compare(password, UserExist.password)
-        console.log(isPasswordMatched, 'isPasswordMatched')
         if (!isPasswordMatched) {
             res.status(400).json({ success: false, message: "Password not correct" })
         }

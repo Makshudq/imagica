@@ -1,1 +1,22 @@
-node_modules
+ 
+node_modules/
+dist/
+coverage/
+logs/
+*.log
+
+ 
+ 
+.env
+.env.local
+.env.*.local
+ 
+
+# ===== System =====
+.DS_Store
+Thumbs.db
+
+# ===== Editors =====
+.vscode/
+.idea/
+*.swp
