@@ -28,7 +28,7 @@ function Login() {
     setUserCoins(coincount)
     setUser({ name, email })
     setIsUserLogged(true)
-    navigate('/generateImage')
+    navigate('/')
 
   }
 
