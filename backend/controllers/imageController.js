@@ -1,18 +1,14 @@
 import axios from "axios"
-import { imageModel, userModel } from "../mongodb/model.js"
+import userModel from "../mongodb/model.js"
 import FormData from "form-data"
 
-const generateImage = async (req, res) => {
-
+export const generateImage = async (req, res) => {
   try {
     const { userId, body: { prompt } } = req
-    console.log(req, 'userId.........')
+
     const userDate = await userModel.findById(userId)
-    if (!userDate) {
-      return res.status(400).json({ success: false, message: "User not found." })
-    }
-    if (!prompt) {
-      return res.status(400).json({ success: false, message: "Please provide prompt." })
+    if (!userDate || !prompt) {
+      return res.status(400).json({ success: false, message: "User/prompt not found !!!." })
     }
     if (userDate.coincount === 0) {
       return res.status(400).json({ success: false, message: "No more coins to generate images." })
@@ -27,7 +23,7 @@ const generateImage = async (req, res) => {
       {
         headers: {
           'x-api-key': process.env.CLIPDROP_API_KEY,
-          ...formData.getHeaders()
+          ...formData.getHeaders() // 🔥 important!
         },
         responseType: 'arraybuffer'
       }
@@ -45,26 +41,6 @@ const generateImage = async (req, res) => {
       resultImage
     })
   } catch (error) {
-
     res.status(400).json({ success: false, message: `ImageController: ${error.message}` })
   }
 }
-
-
-const uploadImage = async (req, res) => {
-  try {
-    const { userId, body: { image, prompt } } = req
-    if (!image || !prompt) res.status(400).json({ success: false, message: "uploadImage: image/prompt not provided" })
-
-    await imageModel.create({
-      userId, image, prompt
-    })
-    res.status(200).json({ success: true, message: 'image uploaded successfully !!!', })
-
-  } catch (error) {
-
-    res.status(400).json({ success: false, message: `uploadImage: ${error.message}` })
-  }
-}
-
-export { generateImage, uploadImage }
